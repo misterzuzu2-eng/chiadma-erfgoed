@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chiadma Erfgoed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Atlantische kust: diep zeeblauw, oker van de duinen, olijf van de Kabla. App-shell met tabbalk onderaan. */
+  --ink:#10262e;
+  --sea:#1d6470;
+  --ochre:#b9771c;
+  --olive:#5d6b2f;
+  --paper:#eef1ef;
+  --card:#ffffff;
+  --muted:#5b6b6f;
+  --line:#d6dedd;
+  --legend:#8a4f9e;
+  --dispute:#b4462f;
+  --display:"Fraunces",Georgia,serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --arabic:"Amiri","Noto Naskh Arabic",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#e6eeec;--sea:#5fb3bd;--ochre:#e3a54a;--olive:#a7b86a;--paper:#0d1a1e;--card:#15262b;--muted:#9bb0b3;--line:#27393e;--legend:#c08ad2;--dispute:#e2795f;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#e6eeec;--sea:#5fb3bd;--ochre:#e3a54a;--olive:#a7b86a;--paper:#0d1a1e;--card:#15262b;--muted:#9bb0b3;--line:#27393e;--legend:#c08ad2;--dispute:#e2795f;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.app{max-width:560px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding-bottom:84px}
+header.top{padding:20px 18px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.brand small{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sea);font-weight:600}
+.brand h1{font-family:var(--display);font-size:30px;line-height:1.1;margin:2px 0 0;text-wrap:balance}
+.ar{font-family:var(--arabic);font-size:26px;color:var(--ochre);direction:rtl}
+main{padding:0 18px;display:flex;flex-direction:column;gap:18px}
+section.view{display:none;flex-direction:column;gap:18px}
+section.view.active{display:flex}
+h2{font-family:var(--display);font-size:22px;margin:6px 0 0;text-wrap:balance}
+h3{font-size:16px;margin:0}
+p{margin:0}
+.lead{color:var(--muted);max-width:65ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.hero{background:linear-gradient(160deg,var(--sea),#0f3d46);color:#f3f6f5;border:none;padding:20px}
+.hero p{color:#d7e6e6}
+.hero .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.hero .stat b{display:block;font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.hero .stat span{font-size:12px;color:#cfe0e0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{cursor:pointer;text-align:left;font:inherit;color:inherit}
+.tile:hover{border-color:var(--sea)}
+.tile .k{font-size:12px;color:var(--sea);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.legendbox{display:flex;flex-wrap:wrap;gap:8px;font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;border:1px solid currentColor;white-space:nowrap}
+.pill.bron{color:var(--olive)}
+.pill.traditie{color:var(--legend)}
+.pill.omstreden{color:var(--dispute)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+input[type=search]{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+.tl{position:relative;display:flex;flex-direction:column;gap:14px;padding-left:22px}
+.tl::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--line)}
+.ev{position:relative;cursor:pointer}
+.ev::before{content:"";position:absolute;left:-20px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--card);border:3px solid var(--sea)}
+.ev.islam::before{border-color:var(--olive)}
+.ev.koloniaal::before{border-color:var(--dispute)}
+.ev.stad::before{border-color:var(--ochre)}
+.ev .when{font-family:var(--display);font-size:18px;color:var(--sea);font-variant-numeric:tabular-nums}
+.ev .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cat{font-size:12px;color:var(--muted)}
+.era{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ochre);font-weight:600;margin:6px 0 -4px -22px}
+.saints{display:grid;grid-template-columns:1fr;gap:8px}
+.saint{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.saint:first-child{border-top:none}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--olive);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600}
+.map{width:100%;height:auto;display:block;border-radius:10px;background:var(--paper)}
+ul.src{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+a{color:var(--sea)}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs .in{max-width:560px;width:100%;display:grid;grid-template-columns:repeat(5,1fr)}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 12px;font-size:12px;color:var(--muted);text-decoration:none;font-weight:500}
+nav.tabs a svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav.tabs a.on{color:var(--sea)}
+.sheet{position:fixed;inset:0;background:rgba(5,15,18,.55);display:none;align-items:flex-end;justify-content:center;z-index:10}
+.sheet.open{display:flex}
+.sheet .box{background:var(--card);width:100%;max-width:560px;max-height:85%;overflow:auto;border-radius:18px 18px 0 0;padding:20px 18px 28px;display:flex;flex-direction:column;gap:10px}
+.close{align-self:flex-end;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;cursor:pointer}
+.note{font-size:13px;color:var(--muted);border-left:3px solid var(--ochre);padding-left:10px}
+button:focus-visible,a:focus-visible,.ev:focus-visible,input:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
+.empty{color:var(--muted);font-size:14px}
+@media (prefers-reduced-motion:no-preference){.sheet .box{animation:up .22s ease-out}@keyframes up{from{transform:translateY(30px)}to{transform:none}}}
+@media (max-width:380px){.grid2{grid-template-columns:1fr}.hero .stats{grid-template-columns:1fr 1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><small>Erfgoedgids · MVP</small><h1>Chiadma</h1></div>
+    <div class="ar" lang="ar">الشياظمة</div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="view" id="v-home" data-view="home">
+      <div class="card hero">
+        <h2 style="margin:0">De kuststreek tussen Safi en Essaouira</h2>
+        <p>Een Arabischtalig stammengebied aan de Atlantische kust, gedragen door een van de oudste islamitische tradities van Marokko: de Regraga en hun zeven heiligen.</p>
+        <div class="stats">
+          <div class="stat"><b>40</b><span>dagen Daour-pelgrimstocht</span></div>
+          <div class="stat"><b>44</b><span>heiligdommen op de route</span></div>
+          <div class="stat"><b>7</b><span>heiligen van de Regraga</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Hoe betrouwbaar is wat je leest?</h3>
+        <p class="lead" style="font-size:14px">Elk item heeft een label. Zo zie je meteen wat historici documenteren en wat uit de mondelinge overlevering komt.</p>
+        <div class="legendbox">
+          <span class="pill bron">Gedocumenteerd</span>
+          <span class="pill traditie">Overlevering</span>
+          <span class="pill omstreden">Omstreden</span>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <button class="card tile" data-go="tijdlijn"><span class="k">Tijdlijn</span><b>Van Mogador tot nu</b><span class="cat">22 momenten, filterbaar</span></button>
+        <button class="card tile" data-go="islam"><span class="k">Islam</span><b>Ribats, Regraga en de Daour</b><span class="cat">Zeven heiligen</span></button>
+        <button class="card tile" data-go="plaatsen"><span class="k">Plaatsen</span><b>Kaart van de streek</b><span class="cat">Sahel en Kabla</span></button>
+        <button class="card tile" data-go="bronnen"><span class="k">Bronnen</span><b>Historici en studies</b><span class="cat">Van Ibn Khaldun tot nu</span></button>
+      </div>
+
+      <div class="card">
+        <h3>Wie zijn de Chiadma?</h3>
+        <p>De naam is Arabisch en werd later de naam van de streek zelf. Zestiende-eeuwse auteurs als Leo Africanus, Mármol en Damião de Góis noemen de Chiadma als Arabische stam, duidelijk onderscheiden van de Berberse Haha in het zuiden.</p>
+        <p>Over de afkomst bestaat discussie. De stam claimt een Arabische oorsprong (Hilali of Maqil). Franse koloniale auteurs zagen hen als gearabiseerde Berbers. Zeker is dat fracties als de Regraga en Heskala Berberse (Masmouda) wortels hebben.</p>
+        <span class="pill omstreden" style="align-self:flex-start">Afkomst omstreden</span>
+      </div>
+
+      <div class="card">
+        <h3>Taal</h3>
+        <p>De Chiadma spreken een Arabisch dialect van het ʿrūbi-type, het "plattelands"-Arabisch van de Atlantische vlakten. De Tashelhit-sprekende Haha noemen zij <i>shlūḥ</i>.</p>
+      </div>
+    </section>
+
+    <!-- TIJDLIJN -->
+    <section class="view" id="v-tijdlijn" data-view="tijdlijn">
+      <div>
+        <h2>Tijdlijn</h2>
+        <p class="lead">Tik op een moment voor details en de bron.</p>
+      </div>
+      <label for="q" class="cat">Zoek in de tijdlijn</label>
+      <input type="search" id="q" placeholder="Bijv. Regraga, Portugezen, ribat">
+      <div class="chips" id="chips" role="group" aria-label="Filter op thema"></div>
+      <div class="tl" id="tl"></div>
+    </section>
+
+    <!-- ISLAM -->
+    <section class="view" id="v-islam" data-view="islam">
+      <div>
+        <h2>Islamitische geschiedenis</h2>
+        <p class="lead">Chiadma ligt in het hart van een netwerk van ribats en zawiya's dat de vroege islamisering van de Atlantische vlakte vormgaf.</p>
+      </div>
+
+      <div class="card">
+        <h3>De komst van de islam</h3>
+        <p>Rond 681–683 leidde ʿUqba ibn Nāfiʿ al-Fihrī de Umayyadische veldtocht tot aan de Atlantische Oceaan. De kroniekschrijver Ibn ʿIdhārī beschrijft in <i>al-Bayān al-Mughrib</i> hoe hij de oceaan bereikte. De eerste ribat van de verre Maghreb was die van Massa in de Sous, uit de tijd van ʿUqba.</p>
+        <span class="pill bron" style="align-self:flex-start">Gedocumenteerd</span>
+      </div>
+
+      <div class="card">
+        <h3>Ribat Shakir (Sidi Chiker)</h3>
+        <p>Volgens historici gebouwd door Yaʿlā ibn Muslin ar-Ragrāgī, een van de zeven heiligen van de Regraga. De plek geldt als graf van Shakir, een Arabische strijder uit het gevolg van ʿUqba. De ribat werd een van de grote verzamelplaatsen van Marokkaanse soefi's en wordt genoemd in <i>at-Tashawwuf ilā rijāl at-taṣawwuf</i> van at-Tādilī (overl. 628 H / ca. 1230), het standaardwerk over Marokkaanse heiligen.</p>
+        <div class="legendbox"><span class="pill bron">Ribat gedocumenteerd</span><span class="pill traditie">Graf van Shakir: overlevering</span></div>
+      </div>
+
+      <div class="card">
+        <h3>De legende van de zeven heiligen</h3>
+        <p>Volgens de overlevering reisden zeven Berberse notabelen, vóór hun bekering christenen, naar de Profeet ﷺ, namen de islam aan en brachten die terug naar hun volk. Elk jaar zouden zij rondtrekken om te zien of de stammen de islam bleven praktiseren. Daaruit ontstond de Daour.</p>
+        <p class="note">Historici beschouwen een ontmoeting met de Profeet ﷺ in het eerste decennium van de islam als legende. De islamisering van de Atlantische vlakte is later, vanaf de veldtochten van ʿUqba.</p>
+        <span class="pill traditie" style="align-self:flex-start">Overlevering</span>
+      </div>
+
+      <div class="card">
+        <h3>De zeven heiligen (Sabʿatu Rijāl van de Regraga)</h3>
+        <div class="saints" id="saints"></div>
+        <p class="note">De namen en spellingen verschillen per bron. Op de top van de Jbel Lahdid ligt Sidi Wasmin als spiritueel middelpunt; drie heiligen liggen aan de kustzijde (Sahel), drie landinwaarts (Kabla).</p>
+      </div>
+
+      <div class="card">
+        <h3>De Daour: pelgrimstocht in 40 dagen</h3>
+        <p>Elk voorjaar trekken de Regraga in een "cirkelvormige pelgrimstocht" langs de heiligdommen van hun voorouders: 44 etappes door het Chiadma-gebied, eerst door de kustvlakte en daarna ten oosten van de Jbel Lahdid. Bij elke halte ontstaat een souk en een moussem. De tocht begint bij de zawiya van Sidi Ali ben Bouali en eindigt bij Sidi Messaoud Boutritiche bij Had Draa.</p>
+        <p>Antropoloog Abdelkader Mana, de grote onderzoeker van de Regraga, beschrijft hoe de Regraga hun <i>baraka</i> elk jaar opnieuw naar de Arabischtalige Chiadma-stammen brengen.</p>
+        <span class="pill bron" style="align-self:flex-start">Levend erfgoed, gedocumenteerd</span>
+      </div>
+
+      <div class="card">
+        <h3>De zeven heiligen van Marrakech</h3>
+        <p>In de 17e eeuw stelde shaykh Abū ʿAlī al-Ḥasan al-Yūsī onder sultan Moulay Ismāʿīl de ziyāra naar de zeven heiligen van Marrakech in. Verschillende auteurs zien dit als een bewust tegenwicht van de centrale macht tegen het prestige van de zeven heiligen van de Regraga.</p>
+        <span class="pill omstreden" style="align-self:flex-start">Interpretatie omstreden</span>
+      </div>
+
+      <div class="card">
+        <h3>Jihad tegen de Portugezen</h3>
+        <p>In 1506 bouwden de Portugezen het Castelo Real bij Mogador. In 1510 viel het fort in handen van het lokale verzet van de Regraga-broederschap. De religieuze broederschap was dus ook een militaire en politieke kracht, net als de ribats eeuwen eerder.</p>
+        <span class="pill bron" style="align-self:flex-start">Gedocumenteerd</span>
+      </div>
+    </section>
+
+    <!-- PLAATSEN -->
+    <section class="view" id="v-plaatsen" data-view="plaatsen">
+      <div>
+        <h2>Plaatsen</h2>
+        <p class="lead">De Jbel Lahdid deelt het land in tweeën: de Sahel (kuststrook) in het westen en de Kabla in het oosten, waar olijfolie, graan en vee worden geproduceerd.</p>
+      </div>
+      <div class="card">
+        <svg class="map" viewBox="0 0 340 420" role="img" aria-label="Schematische kaart van Chiadma tussen Safi en Essaouira">
+          <rect x="0" y="0" width="120" height="420" fill="var(--sea)" opacity=".18"/>
+          <path d="M120 0 C 108 70, 130 140, 112 210 S 125 340, 104 420" stroke="var(--sea)" stroke-width="3" fill="none"/>
+          <text x="20" y="210" fill="var(--sea)" font-size="13" font-family="IBM Plex Sans" transform="rotate(-90 40 210)">Atlantische Oceaan</text>
+          <path d="M120 120 C 180 128, 240 110, 330 135" stroke="var(--sea)" stroke-width="2" fill="none" stroke-dasharray="4 4"/>
+          <text x="236" y="112" fill="var(--muted)" font-size="11" font-family="IBM Plex Sans">Oued Tensift</text>
+          <path d="M175 170 L195 240 L185 320" stroke="var(--ochre)" stroke-width="10" stroke-linecap="round" opacity=".55" fill="none"/>
+          <text x="204" y="255" fill="var(--ochre)" font-size="12" font-weight="600" font-family="IBM Plex Sans">Jbel Lahdid</text>
+          <text x="128" y="292" fill="var(--muted)" font-size="11" font-family="IBM Plex Sans">SAHEL</text>
+          <text x="250" y="300" fill="var(--muted)" font-size="11" font-family="IBM Plex Sans">KABLA</text>
+          <g font-family="IBM Plex Sans" font-size="12" fill="var(--ink)">
+            <circle cx="128" cy="42" r="6" fill="var(--ink)"/><text x="140" y="46">Safi</text>
+            <circle cx="122" cy="120" r="6" fill="var(--dispute)"/><text x="134" y="146">Souira Guedima (Aguz)</text>
+            <circle cx="300" cy="80" r="6" fill="var(--olive)"/><text x="232" y="70">Ribat Shakir</text>
+            <circle cx="188" cy="205" r="6" fill="var(--olive)"/><text x="200" y="208">Sidi Wasmin</text>
+            <circle cx="140" cy="268" r="5" fill="var(--ink)"/><text x="150" y="272">Akermoud</text>
+            <circle cx="220" cy="340" r="5" fill="var(--olive)"/><text x="230" y="344">Had Draa</text>
+            <circle cx="108" cy="392" r="7" fill="var(--ink)"/><text x="122" y="396">Essaouira (Mogador)</text>
+          </g>
+        </svg>
+        <p class="note">Schematische kaart, niet op schaal. Ribat Shakir ligt buiten het eigenlijke Chiadma, nabij de Tensift.</p>
+      </div>
+      <div id="places" style="display:flex;flex-direction:column;gap:12px"></div>
+    </section>
+
+    <!-- BRONNEN -->
+    <section class="view" id="v-bronnen" data-view="bronnen">
+      <div>
+        <h2>Bronnen</h2>
+        <p class="lead">Klassieke auteurs die Chiadma en omgeving beschrijven, en moderne studies waarop dit prototype is gebaseerd.</p>
+      </div>
+      <div class="card">
+        <h3>Klassieke en vroegmoderne bronnen</h3>
+        <ul class="src">
+          <li><b>al-Bakrī</b>, <i>Kitāb al-Masālik wa-l-Mamālik</i> (11e eeuw): noemt Amaqdūl (Mogador) en de haven Aguz als haven van Aghmat.</li>
+          <li><b>Ibn ʿIdhārī</b>, <i>al-Bayān al-Mughrib</i> (ca. 1312): ʿUqba ibn Nāfiʿ aan de Atlantische Oceaan.</li>
+          <li><b>at-Tādilī</b>, <i>at-Tashawwuf ilā rijāl at-taṣawwuf</i> (13e eeuw): Marokkaanse heiligen en ribats, waaronder Shakir.</li>
+          <li><b>Ibn Khaldūn</b>, <i>Kitāb al-ʿIbar</i> (14e eeuw): Hilali-stammen al-Ḥārith en Kilābiyya op de vlakten van de Haha.</li>
+          <li><b>Leo Africanus</b>, <i>Descrittione dell'Africa</i> (1550, geschreven ca. 1526): de "Saidima" naast de al-Ḥārith.</li>
+          <li><b>Damião de Góis</b>, <i>Chronica do felicissimo rei Dom Manuel</i> (1566–67): de "Xiatima" als Arabieren, schatplichtig aan de Portugezen.</li>
+          <li><b>Luis del Mármol Carvajal</b> (16e eeuw): beschrijving van Haha en buren.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Moderne studies</h3>
+        <ul class="src">
+          <li>Abdelkader Mana, <i>Les Regraga: la Daour des Chiadma</i>, Eddif, Casablanca 1988.</li>
+          <li>Georges Lapassade, <i>Le daour des Regraga au Maroc</i>, L'Harmattan 2000.</li>
+          <li>Felipe Benjamín Francisco, "Preliminary Notes on the Arabic Dialect of the Chiadma", 2019, <a href="https://books.openedition.org/iremam/3903">OpenEdition</a>.</li>
+          <li>F. B. Francisco, <i>The Arabic dialect of Essaouira</i>, Prensas Universidad de Zaragoza 2024.</li>
+          <li><i>Encyclopaedia of Islam</i> (2e ed.), lemma's "Ragrāga", "Ḥāḥā" (Deverdun) en "Maṣmūda" (Colin).</li>
+          <li>António M. Lázaro, "A presença portuguesa nas imediações do rio dos Sáveis: Aguz", CHAM.</li>
+          <li>Mohamed Janboubi, <i>Regraga et le phénomène des sept saints</i>.</li>
+          <li>Archives diplomatiques Nantes, fonds 13MA/2: cercle des Haha-Chiadma (1912–1940).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Volgende stap voor de MVP</h3>
+        <p>Primaire bronnen laten nalezen door een historicus, foto's van eigen veldwerk toevoegen, Arabische en Franse versie, en de heiligdommen van de Daour met GPS-coördinaten op een echte kaart.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Hoofdnavigatie"><div class="in">
+  <a href="#home" data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+  <a href="#tijdlijn" data-tab="tijdlijn"><svg viewBox="0 0 24 24"><path d="M6 3v18M6 7h10M6 12h13M6 17h8"/></svg>Tijdlijn</a>
+  <a href="#islam" data-tab="islam"><svg viewBox="0 0 24 24"><path d="M15 4a8 8 0 1 0 5 13A7 7 0 0 1 15 4z"/></svg>Islam</a>
+  <a href="#plaatsen" data-tab="plaatsen"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Plaatsen</a>
+  <a href="#bronnen" data-tab="bronnen"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h7"/></svg>Bronnen</a>
+</div></nav>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title">
+  <div class="box">
+    <button class="close" id="sh-close">Sluiten</button>
+    <div class="when" id="sh-when" style="font-family:var(--display);color:var(--sea);font-size:20px"></div>
+    <h2 id="sh-title" style="margin:0"></h2>
+    <div class="meta" id="sh-meta" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <p id="sh-text"></p>
+    <p class="note" id="sh-src"></p>
+  </div>
+</div>
+
+<script>
+const LABEL={bron:"Gedocumenteerd",traditie:"Overlevering",omstreden:"Omstreden"};
+const CATS={all:"Alles",islam:"Islam",stam:"Stammen",koloniaal:"Portugezen & koloniaal",stad:"Essaouira"};
+const EVENTS=[
+ {era:"Oudheid",when:"7e eeuw v.Chr.",title:"Fenicische handelspost op het eiland Mogador",cat:"stad",rel:"bron",text:"Op het eiland voor de baai van Essaouira zijn Fenicisch aardewerk uit de 7e eeuw v.Chr. en latere Romeinse amforen gevonden. De naam Mogador gaat mogelijk terug op het Fenicische migdol, 'klein fort'.",src:"Archeologische vondsten, Museum Sidi Mohammed ben Abdallah, Essaouira."},
+ {era:"Oudheid",when:"3e eeuw",title:"Romeinse villa op Mogador",cat:"stad",rel:"bron",text:"Op het eiland is een Romeinse villa opgegraven, met munten uit de 3e eeuw. Het achterland was toen bewoond door Berberse (later Masmouda) stammen.",src:"Archeologisch Museum Rabat; Museum Sidi Mohammed ben Abdallah."},
+ {era:"Vroege islam",when:"7e eeuw",title:"De zeven heiligen bezoeken de Profeet ﷺ",cat:"islam",rel:"traditie",text:"Volgens de Regraga-overlevering reisden zeven Berberse notabelen naar de Profeet ﷺ, namen de islam aan en verspreidden die in hun land. Historici beschouwen dit als legende.",src:"Mana 1988; Lapassade 2000; Encyclopaedia of Islam, 'Ragrāga'."},
+ {era:"Vroege islam",when:"681–683",title:"ʿUqba ibn Nāfiʿ bereikt de Atlantische Oceaan",cat:"islam",rel:"bron",text:"De Umayyadische veldheer en stichter van Kairouan trekt door de Maghreb tot aan de oceaan. Uit zijn tijd stamt de ribat van Massa in de Sous, de eerste ribat van de verre Maghreb.",src:"Ibn ʿIdhārī, al-Bayān al-Mughrib."},
+ {era:"Vroege islam",when:"Vroege eeuwen H.",title:"Stichting van Ribat Shakir",cat:"islam",rel:"traditie",text:"Yaʿlā ibn Muslin ar-Ragrāgī bouwt de ribat bij het graf van Shakir, een strijder uit het gevolg van ʿUqba. De exacte datering is onzeker; de ribat zelf is goed gedocumenteerd als soefi-centrum.",src:"at-Tādilī, at-Tashawwuf; overzicht in Bewley, 'The Ribats in Morocco'."},
+ {era:"Middeleeuwen",when:"11e eeuw",title:"Aguz: haven van Aghmat",cat:"stad",rel:"bron",text:"Al-Bakrī beschrijft Aguz aan de monding van de Tensift als belangrijke haven voor Aghmat, drie dagreizen landinwaarts. Hij noemt ook Amaqdūl, het latere Mogador.",src:"al-Bakrī, Kitāb al-Masālik wa-l-Mamālik."},
+ {era:"Middeleeuwen",when:"12e eeuw",title:"Arabische stammen komen naar de Atlantische vlakte",cat:"stam",rel:"omstreden",text:"Vóór de komst van Arabische stammen heette de streek naar de Regraga. Daarna wordt de Arabischtalige stam die later Chiadma heet dominant. Of de Chiadma Hilali, Maqil of gearabiseerde Masmouda zijn, is onder historici omstreden.",src:"Francisco 2019 en 2024; Encyclopaedia of Islam, 'Maṣmūda'."},
+ {era:"Middeleeuwen",when:"ca. 1230",title:"at-Tādilī schrijft at-Tashawwuf",cat:"islam",rel:"bron",text:"Het standaardwerk over de heiligen van Marokko. Het beschrijft het ribat-netwerk, waaronder Shakir, en vormde eeuwenlang het Marokkaanse beeld van heiligheid.",src:"at-Tādilī (overl. 628 H)."},
+ {era:"Middeleeuwen",when:"14e eeuw",title:"Ibn Khaldūn over de Hilali-stammen",cat:"stam",rel:"bron",text:"In Kitāb al-ʿIbar schrijft Ibn Khaldūn dat de al-Ḥārith en Kilābiyya met hun kuddes over de vlakten van de Haha trekken. Sommige onderzoekers zien de Chiadma als een tak van deze Kilābiyya.",src:"Ibn Khaldūn, Histoire des Berbères (vert. De Slane), pp. 63-64."},
+ {era:"Portugese periode",when:"1488–1541",title:"Portugezen in Safi",cat:"koloniaal",rel:"bron",text:"Eerst een handelspost (1488), vanaf 1508 een fort. Vanuit Safi heffen de Portugezen tribuut van de stammen tot aan Mogador. In 1541 verlaten ze de stad.",src:"Sanceau, Castelos em África; Lopes, A Expansão em Marrocos."},
+ {era:"Portugese periode",when:"1506",title:"Bouw van het Castelo Real in Mogador",cat:"koloniaal",rel:"bron",text:"Koning Manuel I laat Diogo de Azambuja een fort bouwen aan de noordrand van de baai van Mogador.",src:"Elaine Sanceau, The reign of the fortunate king (1970)."},
+ {era:"Portugese periode",when:"1506–1525",title:"Fort van Aguz (Souira Guedima)",cat:"koloniaal",rel:"bron",text:"De Portugezen houden een fort aan de monding van de Tensift, in het noorden van Chiadma. Het kleine fort is nog steeds te zien.",src:"Lázaro, CHAM; David Lopes 1931."},
+ {era:"Portugese periode",when:"1510",title:"De Regraga veroveren het Castelo Real",cat:"islam",rel:"bron",text:"Na een blokkade valt het fort in oktober of november 1510 in handen van het lokale verzet van de Regraga-broederschap. De Portugezen trekken hun garnizoen terug naar Safi.",src:"Wikipedia 'Castelo Real' en 'Essaouira', op basis van Portugese kronieken."},
+ {era:"Portugese periode",when:"1510",title:"Beleg van Safi",cat:"stam",rel:"bron",text:"Een Portugese bron beschrijft de stammenliga die Safi belegert. De al-Ḥārith wonen daarin 'op de vlakten van Haha, samen met de Vled Saydima', de vroegste vermeldingen van de Chiadma.",src:"Portugese kroniek, geciteerd bij Francisco 2019."},
+ {era:"Saadiërs",when:"ca. 1526",title:"Leo Africanus noemt de 'Saidima'",cat:"stam",rel:"bron",text:"Leo Africanus schrijft dat de al-Ḥārith samen met de Saidima op de vlakten wonen en tribuut innen bij de Haha. De eerste vermeldingen van de Chiadma vallen in de Saadische tijd.",src:"Leo Africanus, Descrittione dell'Africa."},
+ {era:"Saadiërs",when:"1566–67",title:"Damião de Góis: de Xiatima als 'Arabes'",cat:"stam",rel:"bron",text:"De Portugese kroniekschrijver onderscheidt de Chiadma (Arabieren) duidelijk van de Berbers en noemt hen bij de tribuutheffing tussen de Oumm er-Rbiʿ en Mogador.",src:"Damião de Góis, Chronica do felicissimo rei Dom Manuel, fol. 88-89."},
+ {era:"Alaouieten",when:"17e eeuw",title:"De zeven heiligen van Marrakech",cat:"islam",rel:"omstreden",text:"Al-Yūsī stelt onder Moulay Ismāʿīl de ziyāra naar de zeven heiligen van Marrakech in. Volgens verschillende auteurs om het prestige van de Regraga te neutraliseren.",src:"Henri de Castries, Les sept patrons de Marrakech; Hespress, 'La geste des Regraga'."},
+ {era:"Alaouieten",when:"1760–1765",title:"Stichting van Essaouira",cat:"stad",rel:"bron",text:"Sultan Sidi Mohammed ben Abdallah (Mohammed III) laat een nieuwe havenstad bouwen naar plannen van onder meer Théodore Cornut en Ahmed al-Inglizi. As-Ṣuwayra betekent 'de goed ontworpen'. Joodse handelaren worden aangemoedigd zich er te vestigen.",src:"Wikipedia 'Essaouira'; FORTMED 2026 (Univ. Firenze)."},
+ {era:"Alaouieten",when:"1767",title:"Agadir gesloten, Essaouira wordt dé haven",cat:"stad",rel:"bron",text:"Om de zuidelijke handel via Essaouira te leiden sluit de sultan de haven van Agadir. Essaouira wordt de belangrijkste haven van het rijk en het achterland Chiadma levert graan, olijfolie en vee.",src:"Wikipedia 'Essaouira'."},
+ {era:"Alaouieten",when:"1844",title:"Frans bombardement van Mogador",cat:"koloniaal",rel:"bron",text:"Tijdens de Frans-Marokkaanse oorlog bombardeert een Franse vloot onder de prins van Joinville de stad en bezet kort het eiland.",src:"Algemene geschiedschrijving Frans-Marokkaanse oorlog 1844."},
+ {era:"Protectoraat",when:"1912–1940",title:"Cercle des Haha-Chiadma",cat:"koloniaal",rel:"bron",text:"Onder het Franse protectoraat wordt de streek bestuurd als 'cercle des Haha-Chiadma', vanaf 1940 'cercle de Mogador'. De Franse administratie legt stamfiches en dossiers van caïds aan.",src:"Archives diplomatiques Nantes, fonds 13MA/2."},
+ {era:"Heden",when:"Vandaag",title:"De Daour leeft door",cat:"islam",rel:"bron",text:"Elk voorjaar maken de Regraga de pelgrimstocht van 40 dagen langs 44 heiligdommen. Bij de zawiya opende een museum met documenten, waaronder sherifische dahirs.",src:"SNRT News; Le360, 'Il était une fois le daour des Regraga'."}
+];
+const SAINTS=[
+ ["Sidi Wasmin","Op de top van de Jbel Lahdid; spiritueel centrum, 'sultan' van de zeven."],
+ ["Sidi Yaʿlā ibn Wattil (ibn Muslin)","Verbonden met Ribat Shakir; schakel tussen kust- en binnenlandse stammen."],
+ ["Sidi Ṣāliḥ ibn Abī Bakr","Zoon van Sidi Boubker Achmas; geestelijk erfgoed en onderwijs."],
+ ["Sidi Abū Bakr Ashmās","Stamvader in de traditie."],
+ ["Sidi ʿAbdallāh Adnās","Ten zuiden van de Tensift; verdediging van de leer."],
+ ["Sidi ʿĪsā Bū Khābiya","Een van de heiligen langs de Daour-route."],
+ ["Sidi Saʿīd Sābiq","Een van de heiligen langs de Daour-route."]
+];
+const PLACES=[
+ {n:"Essaouira (Mogador)",t:"Havenstad",d:"Gesticht 1760–1765 door Mohammed III op de plek van het Portugese Castelo Real. Zuidelijke grens van Chiadma; ten zuiden begint het land van de Haha.",r:"bron"},
+ {n:"Jbel Lahdid",t:"Heilige berg",d:"De 'ijzeren berg' van de Regraga. Scheidt de Sahel van de Kabla. Op de top het heiligdom van Sidi Wasmin.",r:"bron"},
+ {n:"Souira Guedima (Aguz)",t:"Fort & haven",d:"Aan de monding van de Tensift, 36 km ten zuiden van Safi. Haven van Aghmat in de 11e eeuw, Portugees fort 1506–1525.",r:"bron"},
+ {n:"Ribat Shakir (Sidi Chiker)",t:"Ribat",d:"Soefi-centrum gesticht door Yaʿlā ibn Muslin ar-Ragrāgī, bij het graf van Shakir. Ligt nu in de provincie Youssoufia.",r:"traditie"},
+ {n:"Akermoud",t:"Kustplaats",d:"Gemeente in Chiadma-gebied; vissersdorpen als Bḥaybaḥ, waar het Chiadma-dialect is onderzocht.",r:"bron"},
+ {n:"Had Draa",t:"Eindpunt Daour",d:"Bij Sidi Messaoud Boutritiche eindigt de 40-daagse pelgrimstocht van de Regraga.",r:"bron"}
+];
+
+let cat="all";
+const tl=document.getElementById("tl"),q=document.getElementById("q");
+function pill(r){return `<span class="pill ${r}">${LABEL[r]}</span>`}
+function renderChips(){
+  document.getElementById("chips").innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="chip" data-cat="${k}" aria-pressed="${k===cat}">${v}</button>`).join("");
+}
+function renderTL(){
+  const s=q.value.trim().toLowerCase();let lastEra="",html="";
+  EVENTS.forEach((e,i)=>{
+    if(cat!=="all"&&e.cat!==cat)return;
+    if(s&&!(e.title+e.text+e.when+e.src).toLowerCase().includes(s))return;
+    if(e.era!==lastEra){html+=`<div class="era">${e.era}</div>`;lastEra=e.era}
+    html+=`<div class="card ev ${e.cat}" tabindex="0" role="button" data-i="${i}"><div class="when">${e.when}</div><h3>${e.title}</h3><div class="meta">${pill(e.rel)}<span class="cat">${CATS[e.cat]}</span></div></div>`;
+  });
+  tl.innerHTML=html||`<p class="empty">Geen momenten gevonden. Probeer een ander zoekwoord of kies "Alles".</p>`;
+}
+document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.cat;renderChips();renderTL()});
+q.addEventListener("input",renderTL);
+const sheet=document.getElementById("sheet");
+function openEv(i){const e=EVENTS[i];
+  document.getElementById("sh-when").textContent=e.when;
+  document.getElementById("sh-title").textContent=e.title;
+  document.getElementById("sh-meta").innerHTML=pill(e.rel)+`<span class="cat">${CATS[e.cat]} · ${e.era}</span>`;
+  document.getElementById("sh-text").textContent=e.text;
+  document.getElementById("sh-src").textContent="Bron: "+e.src;
+  sheet.classList.add("open");document.getElementById("sh-close").focus();}
+tl.addEventListener("click",e=>{const c=e.target.closest(".ev");if(c)openEv(+c.dataset.i)});
+tl.addEventListener("keydown",e=>{const c=e.target.closest(".ev");if(c&&(e.key==="Enter"||e.key===" ")){e.preventDefault();openEv(+c.dataset.i)}});
+document.getElementById("sh-close").onclick=()=>sheet.classList.remove("open");
+sheet.addEventListener("click",e=>{if(e.target===sheet)sheet.classList.remove("open")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")sheet.classList.remove("open")});
+
+document.getElementById("saints").innerHTML=SAINTS.map((s,i)=>`<div class="saint"><span class="num">${i+1}</span><div><b>${s[0]}</b><div class="cat">${s[1]}</div></div></div>`).join("");
+document.getElementById("places").innerHTML=PLACES.map(p=>`<div class="card"><span class="cat" style="color:var(--sea);font-weight:600">${p.t}</span><h3>${p.n}</h3><p>${p.d}</p>${pill(p.r).replace('class="pill','style="align-self:flex-start" class="pill')}</div>`).join("");
+
+const VIEWS=["home","tijdlijn","islam","plaatsen","bronnen"];
+function show(){const h=(location.hash||"#home").slice(1);const v=VIEWS.includes(h)?h:"home";
+  document.querySelectorAll(".view").forEach(el=>el.classList.toggle("active",el.dataset.view===v));
+  document.querySelectorAll("nav.tabs a").forEach(a=>a.classList.toggle("on",a.dataset.tab===v));
+  window.scrollTo(0,0);}
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{location.hash=b.dataset.go});
+window.addEventListener("hashchange",show);
+renderChips();renderTL();show();
+</script>
+</body>
+</html>
